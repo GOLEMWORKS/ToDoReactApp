@@ -23,6 +23,10 @@ const App : React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
+
     return <div>
         <div> 
             <input value={value} onChange={handleChange} ref={inputRef}></input>
