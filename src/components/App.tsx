@@ -12,6 +12,11 @@ const App : React.FC = () => {
         setValue(e.target.value);
     }
 
+    const handleKeydown : React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if(e.key === 'Enter')
+        addTodo();
+    }
+
     const addTodo = () => {
         if(value){
            setTodos([...todos, {
@@ -23,16 +28,31 @@ const App : React.FC = () => {
         }
     }
 
+    const removeTodo = (id:number) : void => {
+        setTodos(todos.filter(todo => todo.id !== id))
+    }
+
+    const toggleTodo = (id:number) : void => {
+        setTodos(todos.map(todo => {
+            if (todo.id !== id) return todo;
+
+            return {
+                ...todo,
+                complete: !todo.complete
+            }
+        }))
+    }
+
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
 
     return <div>
         <div> 
-            <input value={value} onChange={handleChange} ref={inputRef}></input>
+            <input value={value} onChange={handleChange} ref={inputRef} onKeyDown={handleKeydown}></input>
             <button onClick={addTodo}>Add</button>
         </div>
-        <TodoList items={todos}></TodoList>
+        <TodoList items={todos} removeTodo={removeTodo} toggleTodo={toggleTodo}></TodoList>
     </div>
 }
 
